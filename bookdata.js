@@ -12,15 +12,23 @@ function Book(title, author, numPages, read) {
     this.info = () => {console.log(this.title+" by "+this.author+", "+this.numPages+" pages, "+(this.read ? "" : "not")+" read");};
 }
 
-function addBookToLibrary(title, author, numPages) {
+function addBookToLibrary(title, author, numPages, read) {
   // take params, create a book then store it in the array
-  const newBook = new Book(title, author, numPages, false);
+  const newBook = new Book(title, author, numPages, read);
   myLibrary.push(newBook);
 }
 
 const container = document.querySelector(".container")
 
+function resetLibrary() {
+    // reset books in container DOM
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+}
+
 function displayLibrary() {
+    resetLibrary();
     for (const book of myLibrary) {
         const divBook = document.createElement("div");
         divBook.classList.add("card");
@@ -35,6 +43,16 @@ function displayLibrary() {
         container.appendChild(divBook);
     }
 }
+
+document.getElementById("my-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    form = document.querySelector("#my-form");
+    let formData = new FormData(form);
+    let formObject = Object.fromEntries(formData); // {'title': , 'author':, 'pages':, (optionally appears) 'read': }
+    addBookToLibrary(formObject.title, formObject.author, formObject.pages, 'read' in formObject);
+    displayLibrary();
+    e.target.reset();
+});
 
 const defaultBooks = [
   ["Moby Dick", "Herman Melville", 635],
@@ -51,6 +69,6 @@ const defaultBooks = [
   ["Brave New World", "Aldous Huxley", 311]
 ];
 
-defaultBooks.forEach(([title, author, pages]) => addBookToLibrary(title, author, pages));
+defaultBooks.slice(0,3).forEach(([title, author, pages]) => addBookToLibrary(title, author, pages, false));
 
 displayLibrary();
