@@ -27,24 +27,60 @@ function resetLibrary() {
     }
 }
 
+function deleteBook(uuid) {
+    // deletes book with uuid from myLibrary
+    for (let i = 0; i < myLibrary.length; i++) {
+        const book = myLibrary[i]
+        if (book.id === uuid) {
+            myLibrary.splice(i, 1);
+            break;
+        }
+    }
+}
+
 function displayLibrary() {
     resetLibrary();
     for (const book of myLibrary) {
+
         const divBook = document.createElement("div");
         divBook.classList.add("card");
+
+        divBook.setAttribute("data-uuid", book.id);
+
         const title = document.createElement("p");
         title.classList.add("title")
         title.textContent = book.title
+
         const author = document.createElement("p");
         author.classList.add("author")
         author.textContent = book.author;
+
+        const haveRead = document.createElement("p");
+        haveRead.classList.add("have-read")
+        haveRead.textContent = book.read ? "Read" : "Not Read";
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete");
+        
+        divBook.appendChild(deleteButton);
         divBook.appendChild(title);
         divBook.appendChild(author);
+        divBook.appendChild(haveRead);
+
+        deleteButton.addEventListener("click", e => {
+            let parentCard = deleteButton.parentElement;
+            console.log(parentCard);
+            let uuid = parentCard.dataset.uuid;
+            deleteBook(uuid);
+            displayLibrary();
+            console.log(myLibrary)
+        });
+
         container.appendChild(divBook);
     }
 }
 
-document.getElementById("my-form").addEventListener("submit", function (e) {
+document.getElementById("my-form").addEventListener("submit", e => {
     e.preventDefault();
     form = document.querySelector("#my-form");
     let formData = new FormData(form);
