@@ -24,8 +24,14 @@ function displayLibrary() {
     for (const book of myLibrary) {
         const divBook = document.createElement("div");
         divBook.classList.add("card");
-        divBook.textContent = book.title + " by " + book.author;
-        console.log(divBook);
+        const title = document.createElement("p");
+        title.classList.add("title")
+        title.textContent = book.title
+        const author = document.createElement("p");
+        author.classList.add("author")
+        author.textContent = book.author;
+        divBook.appendChild(title);
+        divBook.appendChild(author);
         container.appendChild(divBook);
     }
 }
