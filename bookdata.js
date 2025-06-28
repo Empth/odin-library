@@ -9,7 +9,6 @@ function Book(title, author, numPages, read) {
     this.numPages = numPages;
     this.read = read;
     this.id = crypto.randomUUID();
-    this.info = () => {console.log(this.title+" by "+this.author+", "+this.numPages+" pages, "+(this.read ? "" : "not")+" read");};
 }
 
 function addBookToLibrary(title, author, numPages, read) {
@@ -38,6 +37,16 @@ function deleteBook(uuid) {
     }
 }
 
+function getBook(uuid) {
+    // get book with uuid ow returns null
+    for (const book of myLibrary) {
+        if (book.id === uuid) {
+            return book
+        }
+    }
+    return null
+}
+
 function displayLibrary() {
     resetLibrary();
     for (const book of myLibrary) {
@@ -53,7 +62,7 @@ function displayLibrary() {
 
         const author = document.createElement("p");
         author.classList.add("author")
-        author.textContent = book.author;
+        author.textContent = book.author === "" ? " " : book.author;
 
         const haveRead = document.createElement("p");
         haveRead.classList.add("have-read")
@@ -61,20 +70,36 @@ function displayLibrary() {
 
         const deleteButton = document.createElement("button");
         deleteButton.classList.add("delete");
+
+        const readButton = document.createElement("button");
+        readButton.classList.add("read");
+        readButton.textContent = "Make read";
+
+        const cardHeader = document.createElement("div");
+        cardHeader.classList.add("card-header");
+
+        cardHeader.appendChild(readButton);
+        cardHeader.appendChild(deleteButton);
         
-        divBook.appendChild(deleteButton);
+        divBook.appendChild(cardHeader);
         divBook.appendChild(title);
         divBook.appendChild(author);
         divBook.appendChild(haveRead);
 
         deleteButton.addEventListener("click", e => {
-            let parentCard = deleteButton.parentElement;
-            console.log(parentCard);
+            let parentCard = deleteButton.parentElement.parentElement;
             let uuid = parentCard.dataset.uuid;
             deleteBook(uuid);
             displayLibrary();
-            console.log(myLibrary)
         });
+
+        readButton.addEventListener("click", e => {
+            let parentCard = readButton.parentElement.parentElement;
+            let uuid = parentCard.dataset.uuid;
+            const book = getBook(uuid);
+            book.changeToRead();
+            displayLibrary();
+        })
 
         container.appendChild(divBook);
     }
@@ -105,6 +130,10 @@ const defaultBooks = [
   ["Brave New World", "Aldous Huxley", 311]
 ];
 
-defaultBooks.slice(0,3).forEach(([title, author, pages]) => addBookToLibrary(title, author, pages, false));
+defaultBooks.forEach(([title, author, pages]) => addBookToLibrary(title, author, pages, false));
 
 displayLibrary();
+
+Book.prototype.changeToRead = function () {
+  this.read = true;
+}

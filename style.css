@@ -118,7 +118,8 @@ p.have-read {
 .sidebar {
     border-right: 3px solid black;
     display: grid;
-    align-items: center;
+    align-items: start;
+    padding-top: 180px;
 }
 
 .form-area {
@@ -145,10 +146,54 @@ form > h2 {
     background-color: rgb(228, 33, 33);
     border-radius: 10px;
     border: 3px solid black;
-    justify-self: end;
+    align-self: center;
+    justify-self: center;
 }
 
 .delete:hover {
     cursor: pointer;
-    background-color: rgb(133, 19, 19);
+    background-color: rgb(145, 23, 23);
+}
+
+.delete:active {
+    cursor: pointer;
+    background-color: rgb(145, 23, 23);
+    height: 19px;
+    width: 19px;
+}
+
+.card-header {
+    display: grid;
+    grid-template-columns: 80px 20px;
+    height: 40px;
+    justify-self: end;
+    gap: 10px;
+    align-items: center;
+}
+
+.card-header > button.read {
+    background-color: white;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 0;
+    margin: 0;
+    height: 25px;
+    width: 80px;
+    border: 2px solid black;
+    border-radius: 8px;
+    align-self: center;
+    justify-self: center;
+}
+
+.card-header > button.read:hover {
+    cursor: pointer;
+    background-color: rgb(217, 217, 217);
+}
+
+.card-header > button.read:active {
+    cursor: pointer;
+    background-color: rgb(217, 217, 217);
+    height: 24px;
+    width: 79px;
+    font-size: 12.5px;
 }
